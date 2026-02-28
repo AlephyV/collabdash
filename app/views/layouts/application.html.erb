@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Collab Dash" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Collab Dash">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen flex flex-col <%= content_for(:body_class) %>">
+    <div class="fixed top-4 right-4 z-50 flex flex-col gap-2">
+      <% flash.each do |type, message| %>
+        <% next if message.blank? %>
+        <div data-controller="toast"
+             data-toast-delay-value="3000"
+             class="transform translate-x-full opacity-0 transition-all duration-300 ease-in-out
+                    max-w-sm px-4 py-3 rounded shadow-lg cursor-pointer
+                    <%= type == 'alert' ? 'bg-red-600 text-white' : 'bg-neutral-900 text-white' %>"
+             data-action="click->toast#dismiss">
+          <p class="text-sm"><%= message %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <main class="flex-1 flex items-center justify-center">
+      <%= yield %>
+    </main>
+  </body>
+</html>
